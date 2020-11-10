@@ -71,6 +71,61 @@ PhysicsBody::PhysicsBody(int entity, b2Body* body, float width, float height, ve
 	m_centerOffset = centerOffset;
 }
 
+PhysicsBody::PhysicsBody(int entity, BodyType bodyType, b2Body* body, std::vector<b2Vec2> points, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction, float density)
+{
+	//Used to calculate new width and height
+	float lX = 999.f;
+	float rX = -999.f;
+	float bY = 999.f;
+	float tY = -999.f;
+
+	//Bodies don't reference a shape by themselves
+	//they need a shape that has been linked to a fixture
+	//in order to have a shape
+	int count = points.size();
+	b2Vec2 polyPoints[8];
+
+	if (points.size() < 9)
+	{
+		for (int i = 0; i < points.size(); i++)
+		{
+			polyPoints[i] = points[i];
+
+			//Used to calculate width and height values
+			lX = std::min(lX, points[i].x);
+			rX = std::max(rX, points[i].x);
+			bY = std::min(bY, points[i].y);
+			tY = std::max(tY, points[i].y);
+		}
+	}
+
+	b2PolygonShape tempShape;
+	tempShape.Set(polyPoints, count);
+	tempShape.m_centroid = b2Vec2(centerOffset.x, centerOffset.y);
+
+	//Creates the actual fixture (aka, shape, mass, etc);
+	b2FixtureDef tempFixture;
+	tempFixture.shape = &tempShape;
+	tempFixture.density = density;
+	tempFixture.friction = friction;
+	tempFixture.isSensor = sensor;
+	tempFixture.filter.categoryBits = category;
+	tempFixture.filter.maskBits = collidesWith;
+
+	m_body = body;
+	m_body->CreateFixture(&tempFixture);
+
+	m_body->SetUserData((void*)entity);
+
+	m_body = body;
+	m_bodyType = bodyType;
+
+	m_width = rX - lX;
+	m_height = tY - bY;
+
+	m_centerOffset = centerOffset;
+}
+
 void PhysicsBody::DeleteBody()
 {
 	if (m_body != nullptr)
@@ -94,7 +149,6 @@ void PhysicsBody::ApplyForce(vec3 force)
 	m_body->ApplyForce(b2Vec2(float32(force.x), float32(force.y)),
 						b2Vec2(float32(m_body->GetPosition().x), float32(m_body->GetPosition().y)),
 						 true);
-
 }
 
 
@@ -236,11 +290,56 @@ void PhysicsBody::SetCenterOffset(vec2 cent)
 	m_centerOffset = cent;
 }
 
-void PhysicsBody::SetRadius(float radius, int fixture)
-{
-	m_body->GetFixtureList()[fixture].GetShape()->m_radius = radius;
-}
 
+
+void PhysicsBody::ScaleBody(float scale, int fixture)
+{
+	if (m_bodyType == BodyType::CIRCLE)
+	{
+		float scaledRadius = (m_width / 2.f) * scale;
+
+		m_width += scaledRadius;
+		m_height += scaledRadius;
+		m_body->GetFixtureList()[fixture].GetShape()->m_radius = m_width / 2.f;
+		m_body->SetAwake(true);
+	}
+	else
+	{
+		//Used to calculate new width and height
+		float lX = 999.f;
+		float rX = -999.f;
+		float bY = 999.f;
+		float tY = -999.f;
+
+		//Gets the shape value and casts as b2PolygonShape so we can access the vertices
+		b2PolygonShape* bodyShape = (b2PolygonShape*)m_body->GetFixtureList()[fixture].GetShape();
+		
+		//Center of the polygon
+		b2Vec2 center = bodyShape->m_centroid;
+
+		//loops through every vertice
+		for (int i = 0; i < bodyShape->m_count; i++)
+		{
+			//Create normalized direction
+			b2Vec2 vert = bodyShape->m_vertices[i];
+			lX = std::min(lX, vert.x);
+			rX = std::max(rX, vert.x);
+			bY = std::min(bY, vert.y);
+			tY = std::max(tY, vert.y);
+
+			b2Vec2 dir = (vert - center);
+			dir.Normalize();
+
+			//Moves the vert out by a scaled direction vector
+			bodyShape->m_vertices[i] += scale * dir;
+		}
+
+		m_width = rX - lX;
+		m_height = tY - bY;
+		m_body->SetAwake(true);
+	}
+
+}
 
 void PhysicsBody::SetRotationAngleDeg(float degrees)
 {

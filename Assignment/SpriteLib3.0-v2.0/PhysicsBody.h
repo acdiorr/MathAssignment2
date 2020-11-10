@@ -20,12 +20,13 @@ enum class BodyType
 enum EntityCategories
 {
 	ENVIRONMENT = 0x0001,
-	OBJECTS		= 0x0002,
-	PLAYER		= 0x0003,
-	FRIENDLY	= 0x0004,
-	ENEMY		= 0x0005,
-	PICKUP		= 0x0006,
-	TRIGGER		= 0x0007
+	GROUND		= 0x0002,
+	OBJECTS		= 0x0003,
+	PLAYER		= 0x0004,
+	FRIENDLY	= 0x0005,
+	ENEMY		= 0x0006,
+	PICKUP		= 0x0007,
+	TRIGGER		= 0x0008
 };
 
 
@@ -37,6 +38,8 @@ public:
 	PhysicsBody(int entity, b2Body* body, float radius, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction=1.f, float density=1.f);
 	//Constructs a box collider
 	PhysicsBody(int entity, b2Body* body, float width, float height, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction=1.f, float density=1.f);
+	//Constructs a polygon collider
+	PhysicsBody(int entity, BodyType bodyType, b2Body* body, std::vector<b2Vec2> points, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction=1.f, float density=1.f);
 
 	//Delete the physics body
 	void DeleteBody();
@@ -107,13 +110,12 @@ public:
 	//Set the mass of the physics body
 	void SetMass(float mass);
 
-
+	//Set the scaled width
+	void ScaleBody(float scale, int fixture);
 	//Sets the center offset for the body
 	//*if the offset is 0,0, then all corners will be relative to the
 	//center of the actual sprite	void SetCenterOffset(vec2 cent);
 	void SetCenterOffset(vec2 cent);
-	//Sets the radius of the body
-	void SetRadius(float radius, int fixture);
 
 	//Set the rotation angle
 	void SetRotationAngleDeg(float degrees);

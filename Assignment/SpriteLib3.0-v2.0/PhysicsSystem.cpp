@@ -165,8 +165,8 @@ void PhysicsSystem::CleanupBodies()
 
 		//Destroy the entity
 		ECS::DestroyEntity(PhysicsBody::m_bodiesToDelete[i]);
-
 	}
+
 	//Clear bodies to delete
 	PhysicsBody::m_bodiesToDelete.clear();
 }

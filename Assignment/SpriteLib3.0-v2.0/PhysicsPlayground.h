@@ -19,4 +19,6 @@ public:
 
 protected:
 	PhysicsPlaygroundListener listener;
+
+	int ball = 0;
 };

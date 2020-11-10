@@ -10,9 +10,9 @@
 #include "PhysicsBody.h"
 #include "VerticalScroll.h"
 #include "MainEntities.h"
-//#include "Trigger.h"
 #include "DestroyTrigger.h"
 #include "HorizontalScroll.h"
+#include "CanJump.h"
 
 
 class ECS abstract
