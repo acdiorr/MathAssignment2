@@ -2,6 +2,7 @@
 
 bool PhysicsBody::m_drawBodies = false;
 std::vector<int> PhysicsBody::m_bodiesToDelete;
+std::vector<int> PhysicsBody::m_bodiesToShrink;
 
 PhysicsBody::PhysicsBody(int entity, b2Body * body, float radius, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction, float density)
 {

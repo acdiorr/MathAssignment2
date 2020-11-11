@@ -178,6 +178,7 @@
     <ClInclude Include="SelectiveColorEffect.h" />
     <ClInclude Include="SepiaEffect.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShrinkTrigger.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="SelectiveColorEffect.cpp" />
     <ClCompile Include="SepiaEffect.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShrinkTrigger.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />

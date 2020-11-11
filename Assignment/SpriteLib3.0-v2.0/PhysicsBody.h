@@ -129,6 +129,7 @@ public:
 	static void SetDraw(bool drawBodies);
 
 	static std::vector<int> m_bodiesToDelete;
+	static std::vector<int> m_bodiesToShrink;
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
