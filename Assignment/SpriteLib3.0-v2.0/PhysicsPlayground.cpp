@@ -79,7 +79,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<CanJump>(entity);
 
 		//Sets up the components
-		std::string fileName = "ramFunny.png";
+		std::string fileName = "McCree.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
@@ -190,9 +190,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 80.f));
-		ECS::GetComponent<Trigger*>(entity) = new DestroyTrigger();
+		ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
-		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(ball);
+		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(tObj);
+		TranslateTrigger* temp = (TranslateTrigger*) ECS::GetComponent<Trigger*>(entity);
+		temp->movement = b2Vec2(0.f, 15.f);
+
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);

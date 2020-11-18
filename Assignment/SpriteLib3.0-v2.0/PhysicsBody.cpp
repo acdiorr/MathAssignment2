@@ -2,7 +2,6 @@
 
 bool PhysicsBody::m_drawBodies = false;
 std::vector<int> PhysicsBody::m_bodiesToDelete;
-std::vector<int> PhysicsBody::m_bodiesToShrink;
 
 PhysicsBody::PhysicsBody(int entity, b2Body * body, float radius, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction, float density)
 {
@@ -86,7 +85,7 @@ PhysicsBody::PhysicsBody(int entity, BodyType bodyType, b2Body* body, std::vecto
 	int count = points.size();
 	b2Vec2 polyPoints[8];
 
-	if (points.size() < 9)
+	if (points.size() <= 8)
 	{
 		for (int i = 0; i < points.size(); i++)
 		{
@@ -137,6 +136,24 @@ void PhysicsBody::DeleteBody()
 
 void PhysicsBody::Update(Transform * trans)
 {
+	//Make sure that movement doesn't happen in contact step
+	if (moveLater)
+	{
+		//set position with saved move value
+		SetPosition(moveValue);
+		moveLater = false;
+	}
+	if (rotateLater)
+	{
+		SetRotationAngleDeg(rotationDeg);
+		rotateLater = false;
+	}
+	if (scaleLater)
+	{
+		ScaleBody(scaleVal, scaleFixt);
+		scaleLater = false;
+	}
+
 	//Stores the position;
 	m_position = m_body->GetPosition();
 
@@ -253,10 +270,18 @@ void PhysicsBody::SetBodyType(BodyType type)
 }
 
 
-void PhysicsBody::SetPosition(b2Vec2 bodyPos)
+void PhysicsBody::SetPosition(b2Vec2 bodyPos, bool contactStep)
 {
-	//Body transform
-	m_body->SetTransform(bodyPos, m_body->GetAngle());
+	if (!contactStep)
+	{
+		//Body transform
+		m_body->SetTransform(bodyPos, m_body->GetAngle());
+	}
+	else
+	{
+		moveLater = true;
+		moveValue = bodyPos;
+	}
 }
 
 void PhysicsBody::SetVelocity(vec3 velo)
@@ -293,59 +318,75 @@ void PhysicsBody::SetCenterOffset(vec2 cent)
 
 
 
-void PhysicsBody::ScaleBody(float scale, int fixture)
+void PhysicsBody::ScaleBody(float scale, int fixture, bool contactStep)
 {
-	if (m_bodyType == BodyType::CIRCLE)
+	if (!contactStep)
 	{
-		float scaledRadius = (m_width / 2.f) * scale;
+		if (m_bodyType == BodyType::CIRCLE)
+		{
+			float scaledRadius = (m_width / 2.f) * scale;
 
-		m_width += scaledRadius;
-		m_height += scaledRadius;
-		m_body->GetFixtureList()[fixture].GetShape()->m_radius = m_width / 2.f;
-		m_body->SetAwake(true);
+			m_width += scaledRadius;
+			m_height += scaledRadius;
+			m_body->GetFixtureList()[fixture].GetShape()->m_radius = m_width / 2.f;
+			m_body->SetAwake(true);
+		}
+		else
+		{
+			//Used to calculate new width and height
+			float lX = 999.f;
+			float rX = -999.f;
+			float bY = 999.f;
+			float tY = -999.f;
+
+			//Gets the shape value and casts as b2PolygonShape so we can access the vertices
+			b2PolygonShape* bodyShape = (b2PolygonShape*)m_body->GetFixtureList()[fixture].GetShape();
+
+			//Center of the polygon
+			b2Vec2 center = bodyShape->m_centroid;
+
+			//loops through every vertice
+			for (int i = 0; i < bodyShape->m_count; i++)
+			{
+				//Create normalized direction
+				b2Vec2 vert = bodyShape->m_vertices[i];
+				lX = std::min(lX, vert.x);
+				rX = std::max(rX, vert.x);
+				bY = std::min(bY, vert.y);
+				tY = std::max(tY, vert.y);
+
+				b2Vec2 dir = (vert - center);
+				dir.Normalize();
+
+				//Moves the vert out by a scaled direction vector
+				bodyShape->m_vertices[i] += scale * dir;
+			}
+
+			m_width = rX - lX;
+			m_height = tY - bY;
+			m_body->SetAwake(true);
+		}
 	}
 	else
 	{
-		//Used to calculate new width and height
-		float lX = 999.f;
-		float rX = -999.f;
-		float bY = 999.f;
-		float tY = -999.f;
-
-		//Gets the shape value and casts as b2PolygonShape so we can access the vertices
-		b2PolygonShape* bodyShape = (b2PolygonShape*)m_body->GetFixtureList()[fixture].GetShape();
-		
-		//Center of the polygon
-		b2Vec2 center = bodyShape->m_centroid;
-
-		//loops through every vertice
-		for (int i = 0; i < bodyShape->m_count; i++)
-		{
-			//Create normalized direction
-			b2Vec2 vert = bodyShape->m_vertices[i];
-			lX = std::min(lX, vert.x);
-			rX = std::max(rX, vert.x);
-			bY = std::min(bY, vert.y);
-			tY = std::max(tY, vert.y);
-
-			b2Vec2 dir = (vert - center);
-			dir.Normalize();
-
-			//Moves the vert out by a scaled direction vector
-			bodyShape->m_vertices[i] += scale * dir;
-		}
-
-		m_width = rX - lX;
-		m_height = tY - bY;
-		m_body->SetAwake(true);
+		scaleLater = true;
+		scaleFixt = fixture;
+		scaleVal = scale;
 	}
-
 }
 
-void PhysicsBody::SetRotationAngleDeg(float degrees)
+void PhysicsBody::SetRotationAngleDeg(float degrees, bool contactStep)
 {
-	//Set the rotation angle
-	m_body->SetTransform(m_body->GetPosition(), Transform::ToRadians(degrees));
+	if (!contactStep)
+	{
+		//Set the rotation angle
+		m_body->SetTransform(m_body->GetPosition(), Transform::ToRadians(degrees));
+	}
+	else
+	{
+		rotateLater = true;
+		rotationDeg = degrees;
+	}
 }
 
 void PhysicsBody::SetFixedRotation(bool fixed)

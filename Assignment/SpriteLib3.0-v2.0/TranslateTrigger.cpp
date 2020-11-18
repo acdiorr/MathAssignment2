@@ -1,12 +1,12 @@
-#include "ShrinkTrigger.h"
+#include "TranslateTrigger.h"
 #include "ECS.h"
 
-void ShrinkTrigger::OnTrigger()
+void TranslateTrigger::OnTrigger()
 {
 	Trigger::OnTrigger();
 }
 
-void ShrinkTrigger::OnEnter()
+void TranslateTrigger::OnEnter()
 {
 	Trigger::OnEnter();
 	for (int i = 0; i < m_targetEntities.size(); i++)
@@ -15,7 +15,7 @@ void ShrinkTrigger::OnEnter()
 	}
 }
 
-void ShrinkTrigger::OnExit()
+void TranslateTrigger::OnExit()
 {
 	Trigger::OnExit();
 }

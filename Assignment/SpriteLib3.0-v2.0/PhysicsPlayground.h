@@ -21,4 +21,5 @@ protected:
 	PhysicsPlaygroundListener listener;
 
 	int ball = 0;
+	int tObj = 0;
 };

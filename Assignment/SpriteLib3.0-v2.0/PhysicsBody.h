@@ -97,8 +97,8 @@ public:
 	void SetBodyType(BodyType type);
 
 
-	//Set position (just sets the variable, doesn't actually set the position)
-	void SetPosition(b2Vec2 bodyPos);
+	//Set position
+	void SetPosition(b2Vec2 bodyPos, bool contactStep = false);
 	//Sets the velocity of the phyiscs body
 	void SetVelocity(vec3 velo);
 	//Sets the gravity scale of the physics body
@@ -111,14 +111,14 @@ public:
 	void SetMass(float mass);
 
 	//Set the scaled width
-	void ScaleBody(float scale, int fixture);
+	void ScaleBody(float scale, int fixture, bool contactStep = false);
 	//Sets the center offset for the body
 	//*if the offset is 0,0, then all corners will be relative to the
 	//center of the actual sprite	void SetCenterOffset(vec2 cent);
 	void SetCenterOffset(vec2 cent);
 
 	//Set the rotation angle
-	void SetRotationAngleDeg(float degrees);
+	void SetRotationAngleDeg(float degrees, bool contactStep=false);
 	//Set whether the body has a fixed rotation
 	void SetFixedRotation(bool fixed);
 
@@ -129,13 +129,22 @@ public:
 	static void SetDraw(bool drawBodies);
 
 	static std::vector<int> m_bodiesToDelete;
-	static std::vector<int> m_bodiesToShrink;
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
 	//Body type
 	BodyType m_bodyType = BodyType::BOX;
 
+	//Stagger the movement
+	bool moveLater = false;
+	b2Vec2 moveValue = b2Vec2(0.f, 0.f);
+	//Stagger the rotation
+	bool rotateLater = false;
+	float rotationDeg = 0.f;
+	//Stagger the scale
+	bool scaleLater = false;
+	int scaleFixt = 0;
+	float scaleVal = 0.f;
 
 	//Box2D position
 	b2Vec2 m_position = b2Vec2(0.f, 0.f);

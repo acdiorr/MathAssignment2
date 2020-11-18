@@ -2,7 +2,7 @@
 #include "Trigger.h"
 #include <Box2D/Box2D.h>
 
-class ShrinkTrigger : public Trigger
+class TranslateTrigger : public Trigger
 {
 public:
 	void OnTrigger() override;

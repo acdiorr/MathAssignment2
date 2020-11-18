@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Utilities.h"
+#include "PhysicsPlayground.h"
 
 Scene::Scene(std::string name)
 {
@@ -124,11 +125,17 @@ void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowH
 		}
 	}
 }
-void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg,
+void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, bool isTriggerable, int rotDeg,
 	int vecZ, float shrinkXValue, float shrinkYValue)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
+
+	//Determines if i want a trigger attatched to the object
+	if (isTriggerable == true)
+	{
+		tObj = entity;
+	}
 
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
