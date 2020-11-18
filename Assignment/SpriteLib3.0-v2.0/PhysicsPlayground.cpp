@@ -65,7 +65,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	}
 	
-	//Ramlethal entity
+	//McCree :DDDD
 	{
 		/*Scene::CreatePhysicsSprite(m_sceneReg, "LinkStandby", 80, 60, 1.f, vec3(0.f, 30.f, 2.f), b2_dynamicBody, 0.f, 0.f, true, true)*/
 
@@ -115,9 +115,42 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Another floor
 	CreateBoxEntity("boxSprite.jpg", 150, 10, 265.f, -105.f);
 	//Setup Static WALL TOP
-	CreateBoxEntity("boxSprite.jpg", 75, 15, 332.f, -37.5f, 90.f);
+	CreateBoxEntity("boxSprite.jpg", 55, 15, 332.f, -28.f, 90.f);
 	//Setup Static WALL BOTTOM
-	CreateBoxEntity("boxSprite.jpg", 25, 15, 332.f, -75.f, 90.f);
+	{
+		//Create Entity
+		auto entity = ECS::CreateEntity();
+		wall = entity;
+
+		//Adds Components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Setup the Components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 15);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(45.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+
+		tempDef.position.Set(float32(332.f), float32(-65.f)); //set position
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(90.f);
+	}
+	//CreateSpriteEntity(true, true, wall, "boxSprite.jpg", 45, 15, 45.f, -20.f, 2.f, 332.f, -65.f, 90.f);
+	//CreateBoxEntity("boxSprite.jpg", 25, 15, 332.f, -75.f, 90.f);
 
 
 	//Create platform 
@@ -139,7 +172,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 40, 10, 410.f, -125.f, 90.f);
 	//Setup bottom
 	CreateBoxEntity("boxSprite.jpg", 30, 10, 400.f, -140.f);
-
 
 	//Ball
 	{
@@ -205,14 +237,14 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		//tempDef.position.Set(float32(408.f), float32(7.f));
-		tempDef.position.Set(float32(-30.f), float32(-8.f));
+		tempDef.position.Set(float32(408.f), float32(7.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
 	}
+	CreateDestroyTrigger(wall, "boxSprite.jpg", 5, 5, 30.f, -20.f, 80.f, 400.f, -130.f);
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -233,7 +265,7 @@ void PhysicsPlayground::KeyboardHold()
 
 	if (Input::GetKey(Key::Shift))
 	{
-		speed *= 1.8f;
+		speed *= 2.8f;
 	}
 
 	if (Input::GetKey(Key::A))

@@ -20,6 +20,7 @@ public:
 protected:
 	PhysicsPlaygroundListener listener;
 
-	int ball = 0;
-	int tObj = 0;
+	int wall = 0;
+	int ball = 1;
+	int tObj = 2;
 };
