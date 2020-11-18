@@ -9,13 +9,20 @@ void ShrinkTrigger::OnTrigger()
 void ShrinkTrigger::OnEnter()
 {
 	Trigger::OnEnter();
-	for (int i = 0; i < m_targetEntities.size(); i++)
+
+	if (!triggered)
 	{
-		ECS::GetComponent<PhysicsBody>(m_targetEntities[i]).SetPosition(movement, true);
+		for (int i = 0; i < m_targetEntities.size(); i++)
+		{
+			ECS::GetComponent<PhysicsBody>(m_targetEntities[i]).ScaleBody(scale * 1.f, 0);
+		}
+
+		triggered = true;
 	}
 }
 
 void ShrinkTrigger::OnExit()
 {
 	Trigger::OnExit();
+	
 }

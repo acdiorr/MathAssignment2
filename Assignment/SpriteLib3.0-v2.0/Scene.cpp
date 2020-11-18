@@ -125,17 +125,17 @@ void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowH
 		}
 	}
 }
-void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, bool isTriggerable, int rotDeg,
+void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg, bool isTriggerable,
 	int vecZ, float shrinkXValue, float shrinkYValue)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
 
 	//Determines if i want a trigger attatched to the object
-	if (isTriggerable == true)
-	{
-		tObj = entity;
-	}
+	//if (isTriggerable == true)
+	//{
+		//tObj = entity;
+	//}
 
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);

@@ -10,7 +10,7 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	b2Vec2 movement;
+	float scale;
 protected:
 	bool triggered = false;
 };

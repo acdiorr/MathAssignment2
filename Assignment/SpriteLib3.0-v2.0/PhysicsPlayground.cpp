@@ -190,11 +190,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "boxSprite.jpg";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 80.f));
-		ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
+		ECS::GetComponent<Trigger*>(entity) = new ShrinkTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
-		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(tObj);
-		TranslateTrigger* temp = (TranslateTrigger*) ECS::GetComponent<Trigger*>(entity);
-		temp->movement = b2Vec2(0.f, 15.f);
+		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(ball);
+		ShrinkTrigger* temp = (ShrinkTrigger*) ECS::GetComponent<Trigger*>(entity);
+		temp->scale = -1.f;
 
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -205,7 +205,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(408.f), float32(7.f));
+		//tempDef.position.Set(float32(408.f), float32(7.f));
+		tempDef.position.Set(float32(-30.f), float32(-8.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
