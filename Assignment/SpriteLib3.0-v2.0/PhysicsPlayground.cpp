@@ -37,7 +37,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		//set to 75 ok
+		float num = 75.f;
+
+		vec4 temp = vec4(-num, num, -num, num);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -127,8 +130,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Create floor for trigger room 
 	CreateBoxEntity("boxSprite.jpg", 100, 10, 377.f, -5.f);
-	//Create wall for trigger room 
-	CreateBoxEntity("boxSprite.jpg", 70, 10, 422.f, 25.f, 90.f);
+	//Create wall for trigger room/elevator shaft 
+	CreateBoxEntity("boxSprite.jpg", 250, 10, 422.f, 125.f, 90.f);
 
 
 	//Setup Static Ramp 2
@@ -139,6 +142,26 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 40, 10, 410.f, -125.f, 90.f);
 	//Setup bottom
 	CreateBoxEntity("boxSprite.jpg", 30, 10, 400.f, -140.f);
+	//Setup platorm 2 for room 2 
+	CreateBoxEntity("boxSprite.jpg", 100, 10, 450.f, -110.f);
+
+	//Setup right wall for elevator shaft
+	CreateBoxEntity("boxSprite.jpg", 300, 10, 495.f, 40.f, 90);
+
+
+	//----------------------POST ELEVATOR SECTION-------------------------------\\
+
+	//Initial platform that you get off on
+	CreateBoxEntity("boxSprite.jpg", 100, 10, 540.f, 190.f);
+	//This is where the moving platform will be lul, for now just a basic platform 
+	CreateBoxEntity("boxSprite.jpg", 50, 10, 700.f, 190.f);
+
+	//Platform for the Triangle Puzzle
+	CreateBoxEntity("boxSprite.jpg", 150, 10, 940.f, 210.f);
+	//Triangle slot left
+	CreateBoxEntity("boxSprite.jpg", 24, 10, 1020.f, 203.f, -45);
+	//Triangle slot right
+	CreateBoxEntity("boxSprite.jpg", 24, 10, 1030.f, 203.f, 45);
 
 
 	//Ball
@@ -228,7 +251,8 @@ void PhysicsPlayground::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
-	float speed = 15.f;
+	//set to 15, we just building rn
+	float speed = 30.f;
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
 	if (Input::GetKey(Key::Shift))
@@ -250,7 +274,7 @@ void PhysicsPlayground::KeyboardHold()
 		if (Input::GetKeyDown(Key::Space))
 		{
 			vel += b2Vec2(0.f, 80.f);
-			canJump.m_canJump = false;
+			//canJump.m_canJump = false;
 		}
 	}
 
