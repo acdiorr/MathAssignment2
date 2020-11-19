@@ -30,9 +30,10 @@ public:
 
 	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, bool isTriggerable = false,
 		int vecZ = 2.f, float shrinkXValue = 0, float shrinkYValue = 0);
-	void CreateSpriteEntity(bool type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, 
-								int posX, int posY, int rotDeg, EntityCategories category, int hitting, float friction, float density);
-	void CreateDestroyTrigger(int targetName, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
+	void CreateSpriteEntity(int type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, 
+								int posX, int posY, float movingX, float movingY, int rotDeg, EntityCategories category, int hitting, float friction, float density);
+	void CreateScaleTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
+	void CreateDestroyTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 
 	//Gamepad Input
 	//Because these are virtual you can override them in your inherited classes.

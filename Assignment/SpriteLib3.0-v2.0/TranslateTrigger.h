@@ -10,7 +10,7 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	vec3 movement;
+	b2Vec2 movement;
 protected:
 	bool triggered = false;
 };
