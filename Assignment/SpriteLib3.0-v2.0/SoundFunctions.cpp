@@ -29,3 +29,15 @@ void SoundFunctions::StopSound(std::string fileName)
 	std::string soundString = "close " + fileName;
 	mciSendString(soundString.c_str(), NULL, 0, NULL);
 }
+
+void SoundFunctions::ReplaySound(std::string fileName)
+{
+	std::string soundString = "play "+fileName+" from 0";
+	mciSendString(soundString.c_str(), NULL, 0, NULL);
+}
+
+void SoundFunctions::AdjustVolume(std::string fileName, int percentage)
+{
+	std::string soundString = "setaudio " + fileName + " volume to " + std::to_string(percentage);
+	mciSendString(soundString.c_str(), NULL, 0, NULL);
+}

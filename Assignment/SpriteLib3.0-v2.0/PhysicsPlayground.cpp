@@ -20,7 +20,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Music time
 	SoundFunctions::LoadSound("WildWestMusic.mp3");
+	SoundFunctions::AdjustVolume("WildWestMusic.mp3", 90);
 	SoundFunctions::LoopSound("WildWestMusic.mp3");
+	SoundFunctions::LoadSound("oof.mp4.mp3");
+	SoundFunctions::AdjustVolume("oof.mp4.mp3", 100);
 
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
@@ -334,6 +337,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		if (Input::GetKeyDown(Key::Space))
 		{
+			SoundFunctions::ReplaySound("oof.mp4.mp3");
 			vel += b2Vec2(0.f, 80.f);
 			//canJump.m_canJump = false;
 		}
