@@ -155,7 +155,8 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 	tempPhsBody.SetRotationAngleDeg(rotDeg);
 }
 
-void Scene::CreateSpriteEntity(bool type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, int posX, int posY, int rotDeg, EntityCategories category, int hitting, float friction, float density)
+void Scene::CreateSpriteEntity(int type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, int posX, int posY, float movingX, float movingY, 
+								int rotDeg, EntityCategories category, int hitting, float friction, float density)
 {
 	//Create Entity
 	auto entity = ECS::CreateEntity();
@@ -182,19 +183,23 @@ void Scene::CreateSpriteEntity(bool type, bool ball, bool triggerable, int* name
 	b2Body* tempBody;
 	b2BodyDef tempDef;
 
-	if (type == true)
+	if (type == 1)
 	{
 		tempDef.type = b2_staticBody;
 	}
-	else
+	if (type == 2)
 	{
 		tempDef.type = b2_dynamicBody;
+	}
+	if (type == 3)
+	{
+		tempDef.type = b2_kinematicBody;
 	}
 
 	tempDef.position.Set(float32(posX), float32(posY)); //set position
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
-
+	tempBody->SetLinearVelocity(b2Vec2(movingX, movingY));
 	if (ball)
 	{
 		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetWidth() - shrinkY) / 2.f), vec2(0.f, 0.f), false, category, hitting, friction, density);
@@ -207,7 +212,47 @@ void Scene::CreateSpriteEntity(bool type, bool ball, bool triggerable, int* name
 	tempPhsBody.SetRotationAngleDeg(rotDeg);
 }
 
-void Scene::CreateDestroyTrigger(int targetName, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY)
+void Scene::CreateScaleTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY)
+{
+	///Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+	//Sets up components
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, spriteX, spriteY);
+	if (invisible)
+	{
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	}
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(vecX, vecY, vecZ));
+	ECS::GetComponent<Trigger*>(entity) = new ShrinkTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(targetName);
+	ShrinkTrigger* temp = (ShrinkTrigger*)ECS::GetComponent<Trigger*>(entity);
+	temp->scale = -1.f; //can change to variable if needed
+
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(posX), float32(posY));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+}
+void Scene::CreateDestroyTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -220,6 +265,10 @@ void Scene::CreateDestroyTrigger(int targetName, std::string fileName, int sprit
 
 	//Sets up components
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, spriteX, spriteY);
+	if (invisible)
+	{
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	}
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(vecX, vecY, vecZ));
 	ECS::GetComponent<Trigger*>(entity) = new DestroyTrigger();
 	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
