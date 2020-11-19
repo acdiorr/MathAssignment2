@@ -155,14 +155,13 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 	tempPhsBody.SetRotationAngleDeg(rotDeg);
 }
 
-void Scene::CreateSpriteEntity(bool type, bool ball, bool triggerable, int name, std::string file, int height, int width, int posx, int posy, int posz, int posX, int posY, int rotDeg, EntityCategories category, int hitting, float friction, float density)
+void Scene::CreateSpriteEntity(bool type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, int posX, int posY, int rotDeg, EntityCategories category, int hitting, float friction, float density)
 {
 	//Create Entity
 	auto entity = ECS::CreateEntity();
-
 	if (triggerable) //set true
 	{
-		name = entity;
+		*name = entity;
 	}
 
 	//Adds Components

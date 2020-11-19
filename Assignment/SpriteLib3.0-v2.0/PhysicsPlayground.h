@@ -22,5 +22,6 @@ protected:
 
 	int wall = 0;
 	int ball = 1;
+	int elevator = 2;
 	int tObj = 2;
 };
