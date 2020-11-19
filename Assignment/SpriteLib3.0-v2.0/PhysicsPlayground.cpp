@@ -18,12 +18,26 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
 
+	//Music time
+	SoundFunctions::LoadSound("WildWestMusic.mp3");
+	SoundFunctions::LoopSound("WildWestMusic.mp3");
+
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
+	EffectManager::CreateEffect(EffectType::Grain, windowWidth, windowHeight);
+	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	SepiaEffect* sepiaTemp = (SepiaEffect*)EffectManager::GetEffect(EffectManager::GetSepiaHandle());
+	sepiaTemp->SetIntensity(0.7f);
+	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	VignetteEffect* vignetteTemp = (VignetteEffect*)EffectManager::GetEffect(EffectManager::GetVignetteHandle());
+	vignetteTemp->SetInnerRadius(0.3f);
+
+	//music lul
+	//PlaySound("WestMusic.wav", NULL, SND_FILENAME);
 	//Setup MainCamera Entity
 	{
 		/*Scene::CreateCamera(m_sceneReg, vec4(-75.f, 75.f, -75.f, 75.f), -100.f, 100.f, windowWidth, windowHeight, true, true);*/
@@ -290,7 +304,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	
+
 }
 
 

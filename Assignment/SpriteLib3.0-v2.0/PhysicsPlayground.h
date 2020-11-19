@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 #include "PhysicsPlaygroundListener.h"
-
+#include "SoundFunctions.h"
 class PhysicsPlayground : public Scene
 {
 public:
