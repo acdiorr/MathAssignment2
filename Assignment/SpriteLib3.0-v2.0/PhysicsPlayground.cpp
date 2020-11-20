@@ -295,11 +295,11 @@ void PhysicsPlayground::Update()
 	auto& elevator = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlatform());
 	if (elevator.GetPosition().y <= -105) //go up
 	{
-		tempBody->SetLinearVelocity(b2Vec2(0.f, 8.f));
+		elevator.GetBody()->SetLinearVelocity(b2Vec2(0.f, 20.f));
 	}
-	if (elevator.GetPosition().y >= 100) //go down
+	if (elevator.GetPosition().y >= 200) //go down
 	{
-		tempBody->SetLinearVelocity(b2Vec2(0.f, -8.f));
+		elevator.GetBody()->SetLinearVelocity(b2Vec2(0.f, -20.f));
 	}
 }
 
