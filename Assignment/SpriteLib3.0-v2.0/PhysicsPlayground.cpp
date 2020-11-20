@@ -19,9 +19,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	m_sceneReg = new entt::registry;
 
 	//Music time
-	SoundFunctions::LoadSound("WildWestMusic.mp3");
-	SoundFunctions::AdjustVolume("WildWestMusic.mp3", 90);
-	SoundFunctions::LoopSound("WildWestMusic.mp3");
+	SoundFunctions::LoadSound("WhistleHell.mp3");
+	SoundFunctions::AdjustVolume("WhistleHell.mp3", 1000);
+	SoundFunctions::LoopSound("WhistleHell.mp3");
 	SoundFunctions::LoadSound("oof.mp4.mp3");
 	SoundFunctions::AdjustVolume("oof.mp4.mp3", 100);
 
@@ -32,9 +32,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	float aspectRatio = windowWidth / windowHeight;
 
 	EffectManager::CreateEffect(EffectType::Grain, windowWidth, windowHeight);
+	/*
 	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	SepiaEffect* sepiaTemp = (SepiaEffect*)EffectManager::GetEffect(EffectManager::GetSepiaHandle());
 	sepiaTemp->SetIntensity(0.7f);
+	*/
+	EffectManager::CreateEffect(EffectType::Greyscale, windowWidth, windowHeight);
+	GreyscaleEffect* greyTemp = (GreyscaleEffect*)EffectManager::GetEffect(EffectManager::GetGreyscaleHandle());
+	greyTemp->SetIntensity(0.7f);
+
 	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
 	VignetteEffect* vignetteTemp = (VignetteEffect*)EffectManager::GetEffect(EffectManager::GetVignetteHandle());
 	vignetteTemp->SetInnerRadius(0.3f);
@@ -81,7 +87,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "floppa.gif";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 160);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2000, 1600);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	}
@@ -234,8 +240,18 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 24, 10, 1020.f, 203.f, -45);
 	//Triangle slot right
 	CreateBoxEntity("boxSprite.jpg", 24, 10, 1030.f, 203.f, 45);
-
-
+	//Platform that will continue until the next lil' hole
+	CreateBoxEntity("boxSprite.jpg", 150, 10, 1110.f, 210.f);
+	//Square slot left
+	CreateBoxEntity("boxSprite.jpg", 20, 10, 1180.f, 205.f, 90);
+	//Square slot bottom
+	CreateBoxEntity("boxSprite.jpg", 20, 10, 1190.f, 200.f);
+	//Square slot right
+	CreateBoxEntity("boxSprite.jpg", 20, 10, 1200.f, 205.f, 90);
+	//Platform that will continue until the end lul
+	CreateBoxEntity("boxSprite.jpg", 150, 10, 1270.f, 210.f);
+	//Wall off the player
+	CreateBoxEntity("boxSprite.jpg", 150, 10, 1340.f, 285.f, 90);
 
 	//BALL
 	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 20, 20, 45.f, -8.f, 3.f, 45.f, -8.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f, 1.f);
