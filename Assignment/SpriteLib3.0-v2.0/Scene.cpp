@@ -125,8 +125,7 @@ void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowH
 		}
 	}
 }
-void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg, bool isTriggerable,
-	int vecZ, float shrinkXValue, float shrinkYValue)
+void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg, bool square, int vecZ, float shrinkXValue, float shrinkYValue)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -150,7 +149,16 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkXValue), float(tempSpr.GetHeight() - shrinkYValue), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS);
+	if (square)
+	{
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkXValue), float(tempSpr.GetHeight() - shrinkYValue), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS);
+	}
+	else
+	{
+		std::vector<b2Vec2> points = { b2Vec2(-tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(-tempSpr.GetWidth() / 2.f, tempSpr.GetHeight() / 2.f) };
+		tempPhsBody = PhysicsBody(entity, BodyType::BOX, tempBody, points, vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS, 0.5f, 3.f); //right triangle
+	}
+
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotDeg);
 }
