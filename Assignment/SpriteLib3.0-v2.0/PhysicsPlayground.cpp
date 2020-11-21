@@ -89,7 +89,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "floppa.gif";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2000, 1600);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.8f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, -40.f));
 	}
 	
 	//McCree :DDDD
@@ -109,7 +109,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "McCree.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 3.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 10.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -125,7 +125,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		//tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | PICKUP | TRIGGER, 0.5f, 3.f);
-		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY)/2.f), vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | PICKUP | TRIGGER, 1.f, 3.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY)/2.f), vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | ENVIRONMENT | PICKUP | TRIGGER, 0.5f, 3.f);
 		//std::vector<b2Vec2> points = { b2Vec2(-tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(0, tempSpr.GetHeight() / 2.f) };
 		//tempPhsBody = PhysicsBody(entity, BodyType::TRIANGLE, tempBody, points, vec2(0.f, 0.f), false, PLAYER, ENEMY | OBJECTS | PICKUP | TRIGGER, 0.5f, 3.f);
 
@@ -138,18 +138,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//----------------------STARTING LEVEL SECTION-------------------------------\\
 
-	for (int i = 0; i <= 4; i++)
-	{
-		//Setup Initial Static Box
-		CreateBoxEntity("floor.png", 24, 20, -55.5f + (24 * i), -34.f);
-	}
+	//Setup Initial Static Box
+	CreateBoxEntity("floor.png", 120, 20, -7.5f, -34.f);
 	//Setup Static Ramp BOX
 	CreateBoxEntity("trianglefloor.png", 150, 76, 127.f, -62.f, 0, false);
-	for (int i = 0; i <= 7; i++)
-	{
-		//Another floor
-		CreateBoxEntity("floor.png", 24, 20, 158.f + (24 * i), -110.f);
-	}
+	//Another floor
+	CreateBoxEntity("floor.png", 192, 20, 242.f, -110.f);
 	//Setup Static WALL TOP
 	CreateBoxEntity("plank.png", 55, 15, 332.f, -28.f, 90.f, true, -30.f);
 	//Setup TRIGGER WALL BOTTOM
@@ -160,17 +154,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Create platform 2 
 	CreateBoxEntity("platform.png", 50, 10, 227.f, 0.f);
 
-	for (int i = 0; i <= 4; i++)
-	{
-		//Create floor for trigger room 
-		CreateBoxEntity("floor.png", 24, 20, 320.f + (24 * i), -5.f);
-	}
+	//Create floor for trigger room 
+	CreateBoxEntity("floor.png", 120, 20, 368.f, -5.f);
+
 	//Create Elevator
 	//CreateSpriteEntity(3, false, true, &elevator, "boxSprite.jpg", 45, 5, 45.f, -20.f, 2.f, 460.f, -105.f, 0, 22.f, 0, ENVIRONMENT, PLAYER | ENEMY, 0.3f, 1.f);
 	{
 		//Create Entity
 		auto entity = ECS::CreateEntity();
-		ECS::SetIsMainPlatform(entity, true);
+		ECS::SetIsMainPlatform1(entity, true);
 		elevator = entity;
 
 		//Adds Components
@@ -179,8 +171,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Setup the Components
-		std::string fileName =	"boxSprite.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 5);
+		std::string fileName =	"platform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 9);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(45.f, -20.f, 2.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -198,36 +190,69 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//tempBody->SetLinearVelocity(b2Vec2(0, 22.f));
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY, 1.f, 1.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY, 10.f, 1.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 	}
 
 	//Create wall for trigger room/elevator shaft 
-	CreateBoxEntity("boxSprite.jpg", 250, 10, 422.f, 125.f, 90.f);
+	CreateBoxEntity("plank.png", 310, 12, 422.f, 145.f, 90.f, true, -12.f);
 	//Setup Static Ramp 2
 	CreateBoxEntity("trianglefloor.png", 78, 44.5f, 376.f, -122.f, 0, false);
 
-	//changing vvvvvvvvvvvvvv
-	//Setup platform room 2
-	CreateBoxEntity("boxSprite.jpg", 50, 10, 420.f, -110.f);
 	//Setup wall bottom
-	CreateBoxEntity("boxSprite.jpg", 40, 10, 410.f, -125.f, 90.f);
+	CreateBoxEntity("plank.png", 40, 10, 410.f, -125.f, 90.f, true, -30.f);
 	//Setup bottom
-	CreateBoxEntity("boxSprite.jpg", 30, 10, 400.f, -140.f);
+	CreateBoxEntity("floor.png", 30, 10, 400.f, -140.f, 0, true, -35.f);
 	//Setup platorm 2 for room 2 
-	CreateBoxEntity("boxSprite.jpg", 100, 10, 450.f, -110.f);
-
+	CreateBoxEntity("floor.png", 112, 10, 445.f, -110.f);
 	//Setup right wall for elevator shaft
-	CreateBoxEntity("boxSprite.jpg", 300, 10, 495.f, 40.f, 90);
-
+	CreateBoxEntity("plank.png", 300, 10, 495.f, 40.f, 90, true, -20.f);
+	//ROOF OF START
+	CreateBoxEntity("floor.png", 434, 10, 213, 190.f);
 
 	//----------------------POST ELEVATOR SECTION-------------------------------\\
 
+	//ROOF
+	CreateBoxEntity("floor.png", 434, 10, 630.f, 300.f, 0, true, -10.f);
 	//Initial platform that you get off on
-	CreateBoxEntity("boxSprite.jpg", 100, 10, 540.f, 190.f);
-	//This is where the moving platform will be lul, for now just a basic platform 
-	CreateBoxEntity("boxSprite.jpg", 50, 10, 700.f, 190.f);
+	CreateBoxEntity("floor.png", 112, 10, 544.f, 190.f, 0, true, -10.f);
+
+	//MOVING PLATFORM
+	{
+		//Create Entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsMainPlatform2(entity, true);
+
+		//Adds Components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Setup the Components
+		std::string fileName = "platform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 9);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(45.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+
+		tempDef.position.Set(float32(630.f), float32(190.f)); //set position
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+		//tempBody->SetLinearVelocity(b2Vec2(0, 22.f));
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY, 1000.f, 1.f);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		tempPhsBody.SetRotationAngleDeg(0);
+	}
 
 	//Platform for the Triangle Puzzle
 	CreateBoxEntity("boxSprite.jpg", 150, 10, 940.f, 210.f);
@@ -251,7 +276,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//BALL
 	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 20, 20, 45.f, -8.f, 3.f, 45.f, -8.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f, 1.f);
 	//Setup Ball Scale
-	CreateScaleTrigger(ball, false, "boxSprite.jpg", 15, 15, 30.f, -20.f, 80.f, 415.f, 7.f);
+	CreateScaleTrigger(ball, false, "booze.png", 15, 20, 30.f, -20.f, 80.f, 405.f, 7.f);
 	//Setup Wall Destroy
 	CreateDestroyTrigger(wall, true, "boxSprite.jpg", 5, 5, 30.f, -20.f, 80.f, 400.f, -130.f);
 
@@ -303,7 +328,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	auto& elevator = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlatform());
+	auto& elevator = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlatform1());
+	auto& platform = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlatform2());
+
 	if (elevator.GetPosition().y <= -105) //go up
 	{
 		elevator.GetBody()->SetLinearVelocity(b2Vec2(0.f, 20.f));
@@ -311,6 +338,15 @@ void PhysicsPlayground::Update()
 	if (elevator.GetPosition().y >= 200) //go down
 	{
 		elevator.GetBody()->SetLinearVelocity(b2Vec2(0.f, -20.f));
+	}
+
+	if (platform.GetPosition().x <= 630)
+	{
+		platform.GetBody()->SetLinearVelocity(b2Vec2(20.f, 0.f));
+	}
+	if (platform.GetPosition().x >= 820)
+	{
+		platform.GetBody()->SetLinearVelocity(b2Vec2(-20.f, 0.f));
 	}
 }
 
