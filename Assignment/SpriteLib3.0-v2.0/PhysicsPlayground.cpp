@@ -33,7 +33,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	EffectManager::CreateEffect(EffectType::Grain, windowWidth, windowHeight);
 	GrainEffect* grainTemp = (GrainEffect*)EffectManager::GetEffect(EffectManager::GetGrainHandle());
-	grainTemp->SetStrength(1.f);
+	grainTemp->SetStrength(100.f);
 
 	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	SepiaEffect* sepiaTemp = (SepiaEffect*)EffectManager::GetEffect(EffectManager::GetSepiaHandle());
@@ -269,6 +269,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Wall off the player
 	CreateBoxEntity("floor.png", 150, 10, 1340.f, 285.f, 90);
 
+	//OBJECTS FOR FIRST PUZZLE\\
+
 	//BALL
 	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 20, 20, 45.f, -8.f, 3.f, 45.f, -8.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f, 1.f);
 	//Setup Ball Scale
@@ -276,47 +278,23 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Setup Wall Destroy
 	CreateDestroyTrigger(wall, true, "boxSprite.jpg", 5, 5, 30.f, -20.f, 80.f, 400.f, -130.f);
 
-	//Setup elevator trigger
-	/*{
-		//Creates entity
-		auto entity = ECS::CreateEntity();
+	//OBJECTS FOR SECOND PUZZLE\\
+	
+	CreateTriangleEntity("triangleObj.png", 40, 20, 970.f, 230.f);
 
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<Trigger*>(entity);
 
-		//Sets up components
-		std::string fileName = "boxSprite.jpg";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 80.f));
-		ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
-		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
-		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(elevator);
-		TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
-		temp->movement = b2Vec2(460.f, -105.f);
-		/*
-		for (int i = 0; i < 50; i++)
-		{
-			temp->movement.Set(465.f, -104.f + i);
-		}
-		
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+	//OBJECTS FOR THE THIRD PUZZLE\\
 
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(485.f), float32(-105.f));
+	//The correct piece
+	CreateBoxEntity("boxSprite.jpg", 8, 8, 1300.f, 360.f, 0, true, 2.f, true);
 
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
-		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
-	}*/
+	//wrong stupid ones lul
+	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 30, 20, 1240.f, 370.f, 3.f, 1240.f, 370.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER, 0.3f, 1.f);
+	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 20, 14, 1290.f, 380.f, 3.f, 1290.f, 380.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER, 0.3f, 1.f);
+	CreateSpriteEntity(2, true, true, &ball, "happyBall.png", 20, 20, 1270.f, 390.f, 3.f, 1270.f, 390.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER, 0.3f, 1.f);
+	CreateBoxEntity("boxSprite.jpg", 40, 15, 1290.f, 370.f, 0, true, 2.f, true);
+	CreateBoxEntity("boxSprite.jpg", 50, 39, 1280.f, 400.f, 0, true, 2.f, true);
+	CreateBoxEntity("boxSprite.jpg", 20, 50, 1280.f, 430.f, 0, true, 2.f, true);
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
