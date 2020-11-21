@@ -91,6 +91,20 @@ void Scene::AdjustScrollOffset()
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetOffset(maxSizeY - playerHalfSize);
 }
 
+void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ)
+{
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Set up the components
+	std::string fileName = name;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, sprX, sprY);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(posX, posY, posZ));
+}
+
 void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 
 									float zNear, float zFar, float aspectRatio, bool vertScroll, bool horizScroll)
 {
@@ -164,7 +178,7 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 	else
 	{
 		std::vector<b2Vec2> points = { b2Vec2(-tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(tempSpr.GetWidth() / 2.f, -tempSpr.GetHeight() / 2.f), b2Vec2(-tempSpr.GetWidth() / 2.f, tempSpr.GetHeight() / 2.f) };
-		tempPhsBody = PhysicsBody(entity, BodyType::BOX, tempBody, points, vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS, 0.5f, 3.f); //right triangle
+		tempPhsBody = PhysicsBody(entity, BodyType::RIGHTTRIANGLE, tempBody, points, vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS, 0.5f, 3.f); //right triangle
 	}
 
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));

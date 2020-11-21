@@ -25,6 +25,7 @@ public:
 	virtual void Update();
 
 	void AdjustScrollOffset();
+	void CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ);
 	void CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 
 								float zNear, float zFar, float aspectRatio, bool vertScroll=false, bool horizScroll=false);
 
