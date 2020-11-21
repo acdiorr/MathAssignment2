@@ -315,7 +315,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//OBJECTS FOR SECOND PUZZLE\\
 	
-	CreateTriangleEntity("triangleObj.png", 40, 20, 970.f, 230.f);
+	//CreateTriangleEntity("triangleObj.png", 40, 20, 970.f, 230.f);
 
 
 	//OBJECTS FOR THE THIRD PUZZLE\\
