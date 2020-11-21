@@ -116,7 +116,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(30.f));
+		tempDef.position.Set(float32(-5.f), float32(5.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -139,7 +139,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Setup Static Ramp BOX
 	CreateBoxEntity("trianglefloor.png", 150, 76, 127.f, -62.f, 0, false);
 	//Another floor
-	CreateBoxEntity("floor.png", 192, 20, 242.f, -110.f);
+	CreateBoxEntity("floor.png", 178, 15, 248.f, -107.5f);
 	//Setup Static WALL TOP
 	CreateBoxEntity("plank.png", 55, 15, 332.f, -28.f, 90.f, true, -30.f);
 	//Setup TRIGGER WALL BOTTOM
@@ -192,7 +192,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 	//Create wall for trigger room/elevator shaft 
-	CreateBoxEntity("plank.png", 310, 12, 422.f, 145.f, 90.f, true, -12.f);
+	CreateBoxEntity("plank.png", 410, 12, 422.f, 195.f, 90.f, true, -12.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 12, 170, 422.f, -20.f, -15.f);
 	//Setup Static Ramp 2
 	CreateBoxEntity("trianglefloor.png", 78, 44.5f, 376.f, -122.f, 0, false);
 
@@ -203,14 +205,47 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Setup platorm 2 for room 2 
 	CreateBoxEntity("floor.png", 112, 10, 445.f, -110.f);
 	//Setup right wall for elevator shaft
-	CreateBoxEntity("plank.png", 300, 10, 495.f, 40.f, 90, true, -20.f);
+	CreateBoxEntity("plank.png", 300, 12, 495.f, 40.f, 90, true, -20.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 12, 110, 495.f, 240.f, -15.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 12, 105, 495.f, 350.f, -15.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 12, 110, 593.f, 240.f, -15.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 12, 105, 593.f, 350.f, -15.f);
 	//ROOF OF START
-	CreateBoxEntity("floor.png", 434, 10, 213, 190.f);
+	CreateBoxEntity("floor.png", 391, 10, 235.f, 190.f);
+	//LEFT ROOF WALL
+	CreateBoxEntity("plank.png", 180, 10, 46.f, 160.f, 90, true, -20.f);
+	//DECORATION
+	CreateDecoration("plankVertical.png", 10, 100, 46.f, 20.f, -15.f);
+	//ROOF OF SPAWN
+	CreateBoxEntity("floor.png", 120, 10, -7.5f, 70.f);
+	//WALL OF SPAWN
+	CreateBoxEntity("plank.png", 100, 10, -60.f, 20.f, 90, true, -20.f);
+	//DECORATION
+	CreateDecoration("floorVertical.png", 5, 100, -64.5f, 20.f, -15.f);
+	//DOOR DECORATION
+	CreateDecoration("door.png", 40, 83, -5, 0, -10.f);
+
+	//BACKGROUND WOOD
+	CreateDecoration("floor3.png", 500, 160, -191.f, -108.f, -39.f);
+	CreateDecoration("floor3.png", 500, 260, -203.f, 102.f, -39.f);
+	CreateDecoration("floor3.png", 500, 160, 172.f, 270.f, -39.f);
+	CreateDecoration("floor3.png", 500, 160, 88.f, -180.f, -39.f);
+	CreateDecoration("floor3.png", 500, 170, 348.f, -195.f, -39.f);
+	CreateDecoration("floor3.png", 500, 160, 345.f, 380.f, -39.f);
+	CreateDecoration("floor3.png", 500, 160, 745.f, 480.f, -39.f);
 
 	//----------------------POST ELEVATOR SECTION-------------------------------\\
 
-	//ROOF
+	//ROOF ELEVATOR SHAFT
 	CreateBoxEntity("floor.png", 434, 10, 630.f, 300.f, 0, true, -10.f);
+	//ROOF WIN AREA
+	CreateBoxEntity("floor.png", 434, 10, 630.f, 400.f, 0, true, -10.f);
+	//WALL WIN AREA
+	CreateDecoration("floorVertical.png", 5, 100, 417.5f, 345.f, -15.f);
 	//Initial platform that you get off on
 	CreateBoxEntity("floor.png", 112, 10, 544.f, 190.f, 0, true, -10.f);
 
@@ -259,7 +294,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Platform that will continue until the next lil' hole
 	CreateBoxEntity("floor.png", 150, 10, 1110.f, 210.f);
 	//Square slot left
-	CreateBoxEntity("floor.pngg", 20, 10, 1180.f, 205.f, 90);
+	CreateBoxEntity("floor.png", 20, 10, 1180.f, 205.f, 90);
 	//Square slot bottom
 	CreateBoxEntity("floor.png", 20, 10, 1190.f, 200.f);
 	//Square slot right
