@@ -7,7 +7,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
 	//No gravity this is a top down scene
-	m_gravity = b2Vec2(0.f, -65.f);
+	m_gravity = b2Vec2(0.f, -95.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -208,7 +208,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("plank.png", 300, 12, 495.f, 40.f, 90, true, -20.f);
 	//DECORATION
 	CreateDecoration("plankVertical.png", 12, 110, 495.f, 240.f, -15.f);
-	//DECORATION
+	//DECORATIONd
 	CreateDecoration("plankVertical.png", 12, 105, 495.f, 350.f, -15.f);
 	//DECORATION
 	CreateDecoration("plankVertical.png", 12, 110, 593.f, 240.f, -15.f);
@@ -280,7 +280,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//tempBody->SetLinearVelocity(b2Vec2(0, 22.f));
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY, 1000.f, 1.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY, 1000.f, 1.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 	}
@@ -315,7 +315,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//OBJECTS FOR SECOND PUZZLE\\
 	
-	//CreateTriangleEntity("triangleObj.png", 40, 20, 970.f, 230.f);
+	CreateTriangleEntity("triangleObj.png", 40, 20, 970.f, 230.f);
 
 
 	//OBJECTS FOR THE THIRD PUZZLE\\
@@ -388,7 +388,7 @@ void PhysicsPlayground::KeyboardHold()
 		{
 			SoundFunctions::ReplaySound("oof.mp4.mp3");
 			vel += b2Vec2(0.f, 80.f);
-			//canJump.m_canJump = false;
+			canJump.m_canJump = false;
 		}
 	}
 
