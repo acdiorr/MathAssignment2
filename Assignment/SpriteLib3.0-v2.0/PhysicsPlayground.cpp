@@ -142,7 +142,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Setup Static WALL TOP
 	CreateBoxEntity("plank.png", 55, 15, 332.f, -28.f, 90.f, true, -30.f);
 	//Setup TRIGGER WALL BOTTOM
-	CreateSpriteEntity(1, 2, true, &wall, "plank.png", 45, 15, 45.f, -20.f, 2.f, 332.f, -65.f, 0, 0, 90.f, GROUND, PLAYER | ENEMY, 1.f, 1.f);
+	CreateSpriteEntity(1, 2, true, &wall, "plank.png", 45, 15, 45.f, -20.f, 2.f, 332.f, -65.f, 0, 0, 90.f, OBJECTS, PLAYER | ENEMY | OBJECTS, 1.f, 1.f);
 
 	//Create platform 
 	CreateBoxEntity("platform.png", 50, 10, 127.f, 0.f);
@@ -185,7 +185,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//tempBody->SetLinearVelocity(b2Vec2(0, 22.f));
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | ENEMY, 10.f, 1.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, PLAYER | ENEMY, 10.f, 1.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 	}
@@ -280,7 +280,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 		//tempBody->SetLinearVelocity(b2Vec2(0, 22.f));
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY, 1000.f, 1.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, PLAYER | ENEMY, 1000.f, 1.f);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(0);
 	}
@@ -307,7 +307,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//OBJECTS FOR FIRST PUZZLE\\
 
 	//BALL
-	CreateSpriteEntity(2, 1, true, &ball, "happyBall.png", 20, 20, 45.f, -8.f, 3.f, 45.f, -8.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f, 1.f);
+	CreateSpriteEntity(2, 1, true, &ball, "happyBall.png", 20, 20, 45.f, -8.f, 3.f, 45.f, -8.f, 0, 0, 0, OBJECTS, OBJECTS | GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f, 1.f);
 	//Setup Ball Scale
 	CreateScaleTrigger(ball, false, "booze.png", 15, 20, 30.f, -20.f, 80.f, 405.f, 7.f);
 	//Setup Wall Destroy
@@ -318,7 +318,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Wall to last puzzle
 	CreateSpriteEntity(1, 2, true, &wall3, "floor.png", 300, 10, 1080.f, 360.f, 20.f, 1080, 360.f, 0, 0, 90.f, GROUND, OBJECTS | ENVIRONMENT | PLAYER, 1.f, 1.f);
 	//Stairs
-	CreateSpriteEntity(1, 3, true, &stairs, "trianglefloor.png", 160, 90, 127.f, -62.f, -20.f, 0.f, 300.f, 0, 0, 0, GROUND, PLAYER | ENEMY | OBJECTS, 1.f, 1.f);
+	CreateSpriteEntity(1, 3, true, &stairs, "trianglefloor.png", 160, 90, 127.f, -62.f, -20.f, 0.f, 300.f, 0, 0, 0, OBJECTS, PLAYER | ENEMY | OBJECTS, 1.f, 1.f);
 	//Open Blocked Win area
 	CreateTranslateTrigger(stairs, true, "boxSprite.jpg", 5, 5, 30.f, -20.f, 80.f, 927.f, 260.f, 1025.f, 204.f);
 	//Open Next Puzzle
@@ -372,7 +372,7 @@ void PhysicsPlayground::Update()
 		platform.GetBody()->SetLinearVelocity(b2Vec2(-20.f, 0.f));
 	}
 
-	if (player.GetPosition().y <= -100) //death barrier
+	if (player.GetPosition().y <= -200) //death barrier
 	{
 		exit(0);
 	}
