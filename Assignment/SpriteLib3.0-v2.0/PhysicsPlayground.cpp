@@ -319,6 +319,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateSpriteEntity(1, 2, true, &wall3, "floor.png", 300, 10, 1080.f, 360.f, 20.f, 1080, 360.f, 0, 0, 90.f, GROUND, OBJECTS | ENVIRONMENT | PLAYER, 1.f, 1.f);
 	//Stairs
 	CreateSpriteEntity(1, 3, true, &stairs, "trianglefloor.png", 160, 90, 127.f, -62.f, -20.f, 0.f, 300.f, 0, 0, 0, OBJECTS, PLAYER | ENEMY | OBJECTS, 1.f, 1.f);
+
 	//Open Blocked Win area
 	CreateTranslateTrigger(stairs, true, "boxSprite.jpg", 5, 5, 30.f, -20.f, 80.f, 927.f, 260.f, 1025.f, 204.f);
 	//Open Next Puzzle
@@ -335,7 +336,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//The correct piece
 	CreateBoxEntity("boxSprite.jpg", 8, 8, 1300.f, 360.f, 0, true, 2.f, true);
-
 	//wrong stupid ones lul
 	CreateSpriteEntity(2, 1, true, &noTouch, "happyBall.png", 30, 20, 1240.f, 370.f, 3.f, 1240.f, 300.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | OBJECTS, 0.3f, 1.f);
 	CreateSpriteEntity(2, 1, true, &noTouch, "happyBall.png", 20, 14, 1290.f, 380.f, 3.f, 1290.f, 300.f, 0, 0, 0, OBJECTS, GROUND | ENVIRONMENT | PLAYER | OBJECTS, 0.3f, 1.f);
@@ -343,6 +343,18 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 40, 15, 1290.f, 300.f, 0, true, 2.f, true);
 	CreateBoxEntity("boxSprite.jpg", 50, 39, 1280.f, 300.f, 0, true, 2.f, true);
 	CreateBoxEntity("boxSprite.jpg", 20, 50, 1280.f, 300.f, 0, true, 2.f, true);
+
+
+	//OBJECT FOR WINNING\\
+
+	//Win image
+	CreateSpriteEntity(1, 1, true, &image, "win.png", 150, 150, 1000.f, -600.f, 100.f, 1000.f, -600.f, 0, 0, 0, OBJECTS, 0, 1.f, 1.f);
+
+	//win Trigger
+	CreateTranslateTrigger(image, false, "borgar.png", 10, 10, 30.f, -20.f, 80.f, 460.f, 317.f, 460.f, 317.f);
+	endTriggerEntity = CreateEndTrigger(false, "borgar.png", 10, 10, 30.f, -20.f, 80.f, 460.f, 317.f);
+
+
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -374,8 +386,9 @@ void PhysicsPlayground::Update()
 
 	if (player.GetPosition().y <= -200) //death barrier
 	{
-		exit(0);
+		player.SetPosition(b2Vec2(544, 210), true);
 	}
+	((EndTrigger*)(ECS::GetComponent<Trigger*>(endTriggerEntity)))->OnUpdate();
 }
 
 
@@ -419,6 +432,11 @@ void PhysicsPlayground::KeyboardHold()
 	else if (Input::GetKey(Key::I))
 	{
 		player.ScaleBody(-1.3 * Timer::deltaTime, 0);
+	}
+
+	else if (Input::GetKey(Key::R))
+	{
+		std::cout << "X: " << player.GetPosition().x << "\n" << "Y: " << player.GetPosition().y << "\n";
 	}
 
 	b2Vec2 NewLinearVelocity = b2Vec2(vel.x * speed, player.GetVelocity().y + vel.y);

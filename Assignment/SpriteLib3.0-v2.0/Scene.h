@@ -37,7 +37,7 @@ public:
 	void CreateScaleTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 	void CreateDestroyTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 	void CreateTranslateTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int moveX, int moveY, int posX, int posY);
-
+	unsigned CreateEndTrigger(bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 	//Gamepad Input
 	//Because these are virtual you can override them in your inherited classes.
 	//The same way you do for Update().

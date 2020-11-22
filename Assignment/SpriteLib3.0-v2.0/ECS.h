@@ -15,6 +15,7 @@
 #include "ShrinkTrigger.h"
 #include "CreationTrigger.h"
 #include "HorizontalScroll.h"
+#include "EndTrigger.h"
 #include "CanJump.h"
 
 

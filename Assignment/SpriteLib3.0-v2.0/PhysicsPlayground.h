@@ -19,6 +19,7 @@ public:
 
 protected:
 	PhysicsPlaygroundListener listener;
+	unsigned endTriggerEntity;
 
 	int player = 0;
 	int wall = 1;
@@ -28,4 +29,5 @@ protected:
 	int stairs = 5;
 	int wall3 = 6;
 	int noTouch = 7;
+	int image = 8;
 };
