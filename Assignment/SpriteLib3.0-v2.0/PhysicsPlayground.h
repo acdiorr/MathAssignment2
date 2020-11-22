@@ -24,4 +24,8 @@ protected:
 	int wall = 1;
 	int ball = 2;
 	int elevator = 3;
+	int wall2 = 4;
+	int stairs = 5;
+	int wall3 = 6;
+	int noTouch = 7;
 };

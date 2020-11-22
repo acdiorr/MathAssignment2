@@ -30,12 +30,13 @@ public:
 								float zNear, float zFar, float aspectRatio, bool vertScroll=false, bool horizScroll=false);
 
 	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, bool square = true,  int vecZ = 1.f, bool isDynamic = false, float shrinkXValue = 0, float shrinkYValue = 0);
-	void CreateSpriteEntity(int type, bool ball, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, 
+	void CreateSpriteEntity(int type, int body, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz, 
 								int posX, int posY, float movingX, float movingY, int rotDeg, EntityCategories category, int hitting, float friction, float density);
 	void CreateTriangleEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, int vecZ = 2.f , float shrinkXValue = 0, float shrinkYValue = 0);
 
 	void CreateScaleTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 	void CreateDestroyTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
+	void CreateTranslateTrigger(int targetName, bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int moveX, int moveY, int posX, int posY);
 
 	//Gamepad Input
 	//Because these are virtual you can override them in your inherited classes.
