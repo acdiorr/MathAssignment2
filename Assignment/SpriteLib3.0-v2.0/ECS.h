@@ -13,6 +13,7 @@
 #include "DestroyTrigger.h"
 #include "TranslateTrigger.h"
 #include "ShrinkTrigger.h"
+#include "CreationTrigger.h"
 #include "HorizontalScroll.h"
 #include "CanJump.h"
 
